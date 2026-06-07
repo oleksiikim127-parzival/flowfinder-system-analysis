@@ -44,6 +44,45 @@ We worked in a team of 3 with equal weekly task split, peer review, and sync dis
 | Package diagram | [`package_diagram.puml`](package_diagram.puml) |
 | Object diagrams | [`object_diagram_1.puml`](object_diagram_1.puml), [`object_diagram_2.puml`](object_diagram_2.puml) |
 | Detailed UC specs | [`01_t_s_UC1.md`](01_t_s_UC1.md), [`02_t_s_UC10.md`](02_t_s_UC10.md), [`03_t_s_UC3.md`](03_t_s_UC3.md) |
+| Exported diagrams (PNG) | [`diagrams/`](diagrams/) |
+
+---
+
+## Key diagrams
+
+### Use case diagram
+
+![Use case diagram](diagrams/use-case.png)
+
+### Activity — Connect bank account (UC12)
+
+![Activity diagram UC12](diagrams/activity-uc12-connect-bank.png)
+
+### Activity — Manage group (UC21)
+
+![Activity diagram UC21](diagrams/activity-uc21-manage-group.png)
+
+### Entity-relationship diagram
+
+![ERD](diagrams/erd.png)
+
+### Analysis class diagram
+
+![Analysis class diagram](diagrams/analysis-class.png)
+
+### Design class diagram
+
+![Design class diagram](diagrams/design-class.png)
+
+### Package diagram
+
+![Package diagram](diagrams/package.png)
+
+### Object diagrams
+
+![Object diagram 1](diagrams/object-diagram-1.png)
+
+![Object diagram 2 — budget tracking](diagrams/object-diagram-2.png)
 
 ---
 
