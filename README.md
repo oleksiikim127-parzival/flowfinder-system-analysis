@@ -2,7 +2,7 @@
 
 **Course:** PB007 Software Engineering I  
 **University:** Masaryk University, Faculty of Informatics  
-**Period:** Autumn 2023 (semester project)  
+**Period:** Autumn 2025 (semester project)  
 **Type:** Fictional startup — requirements & UML modeling
 
 > Personal finance application for tracking transactions, budgets, and premium features such as bank sync and shared group budgeting.
