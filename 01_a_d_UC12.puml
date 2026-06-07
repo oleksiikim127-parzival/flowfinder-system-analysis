@@ -1,0 +1,22 @@
+@startuml
+title Connect Bank Account
+
+start
+
+:Open "Connect Bank Account" screen;
+
+repeat
+:Select bank from list of banks;
+:Redirect to bank’s secure login portal;
+if (Authentication successful?) then (Yes)
+  :Receive access token from bank API;
+  :Securely store encrypted access token;
+
+  :Display "Bank account connected successfully";
+  stop
+else (No)
+  :Display error message;
+endif
+repeat while (Retry?) is (yes) not (no) ->;
+stop
+@enduml

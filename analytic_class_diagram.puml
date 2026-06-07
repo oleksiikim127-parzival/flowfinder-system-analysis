@@ -1,0 +1,139 @@
+@startuml
+title FlowFinder Class Diagram
+
+'==========================
+' Core Classes
+'==========================
+
+class User {
+  - name
+  - password
+  - dataAccesses
+  + login()
+  + logout()
+  + synchronizeData()
+  + grantAccess()
+  + importData()
+  + exportData()
+}
+
+class Group {
+    - name
+    + inviteUser()
+}
+
+class Subscription {
+  - startDate
+  - endDate
+  - isActive
+  - price
+  + renew()
+  + expire()
+}
+
+class Transaction {
+  - amount
+  - date
+  - description
+  - note
+  - isIncoming
+  - currency
+  - source
+  - target
+  + convertCurrency()
+  + assignCategory()
+}
+
+class Category {
+  - name
+  + getSpentAmount()
+}
+
+class TransactionTemplate {
+  
+  - name
+  - amount
+  - date
+  - description
+  - note
+  - isIncoming
+  - currency
+  - source
+  - target
+  + apply()
+}
+
+class ExchangeRate {
+  
+  - currencyFrom
+  - currencyTo
+  - rate
+  + updateRate()
+  + convert()
+}
+
+'==========================
+' Advanced / Full Version
+'==========================
+
+class BankAccount {
+  
+  - bankName
+  - iban
+  - balance
+  - currency
+  - apiKey
+  + connect()
+  + disconnect()
+  + fetchTransactions()
+}
+
+class PaymentOrder {
+  
+  - amount
+  - recipientIban
+  - executionDate
+  - status
+  + execute()
+  + schedule()
+  + cancel()
+}
+
+class BudgetLimit {
+  - limit
+  - currency
+  - period
+  - spentAmount
+  + checkStatus()
+}
+
+class Statistics {
+  - totalIncome
+  - totalExpenses
+  - averageExpense
+  - currency
+}
+
+'==========================
+' Relationships
+'==========================
+
+Statistics "0..n" --> "0..n" Category : has >
+
+User "1" --> "0..1" Subscription : has >
+User "1" --> "0..n" Transaction : has >
+User "1" --> "0..n" Category : has >
+User  "1" --> "0..n"  TransactionTemplate : has >
+User "1" --> "0..n" BankAccount : has >
+User "1..n" --> "0..n" Group : member >
+User "1" --> "0..n" Group : owner >
+User "1" --> "1..n" Statistics : has >
+User "1" --> "0..n" BudgetLimit : has >
+User "1" --> "0..n" ExchangeRate : has >
+
+Category "1" <-- "0..1" BudgetLimit : limits <
+Transaction "0..n" --> "1" Category
+Transaction ..> ExchangeRate
+BankAccount "1" --> "0..n" PaymentOrder : has >
+
+@enduml

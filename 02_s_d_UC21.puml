@@ -1,0 +1,29 @@
+@startuml sequence_diagram_UC_12
+title Invite user sequence diagram
+autonumber
+autoactivate on
+
+actor Actor as "Owner"
+participant GroupManager as "GroupManager"
+participant UserManager as "UserManager"
+participant Group as "Group"
+
+Actor -> GroupManager : group = findGroup("Fellowship of the Ring", Owner.id);
+GroupManager -> GroupManager : groups = findGroups(Owner.id);
+    loop foreach group in groups
+    GroupManager -> Group : name = getName();
+    GroupManager <-- Group : name
+        break name == "Fellowship of the Ring"
+            Actor <-- GroupManager : group
+        end
+    end
+    Actor <-- GroupManager : null
+
+opt group != null
+    Actor -> UserManager : user = findUser("Aragorn");
+    Actor <-- UserManager : user
+    Actor -> GroupManager : inviteUser(group.id, group.name, user.id);
+    GroupManager -> UserManager : notify(user.id, "Hi, you have been invited to this fabulous group: " \n + group.name + "! Click HERE to join")
+end
+
+@enduml

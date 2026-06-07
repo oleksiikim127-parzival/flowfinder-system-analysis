@@ -1,0 +1,20 @@
+@startuml
+autonumber
+autoactivate on
+
+actor User
+participant "TransactionManager" as TM
+participant "CategoryManager" as CM
+
+User -> CM : categories = getCategories(User.id)
+User <-- CM : categories
+opt Category doesn't exist
+    User -> CM: createCategory(name, User.id)
+    CM -> Category ** : category = <<create>>
+    CM --> User : category
+end
+    User -> TM: createTransaction(20, new Date(2025, 6, 6), "grocery", null, false, "CZK", null, "Albert", category)
+    TM -> Transaction ** : transaction = <<create>>
+    TM --> User : transaction
+
+@enduml

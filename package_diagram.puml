@@ -1,0 +1,287 @@
+@startuml
+title FlowFinder Design Class Diagram
+
+package user {
+  class User {
+    - id : int
+    - name : String
+    - password : String
+    - dataAccesses : Map<int, DataAccess>
+    + User(id: int, name: String, password: String)
+    + getId() : int
+    + getName() : String
+    + setName(name: String)
+    + getPassword() : String
+    + setPassword(password: String)
+    + getDataAccess(groupId: int) : DataAccess
+    + setDataAccess(groupId: int, dataAccess: DataAccess) : Boolean
+    + addDataAccess(groupId: int, dataAccess: DataAccess): Boolean
+    + removeDataAccess(groupId: int) : Boolean
+  }
+
+  enum DataAccess {
+    READ
+    READ_WRITE
+  }
+
+  class Group {
+    - id : int
+    - name : String
+    + Group(id: int, name: String)
+    + getId() : int
+    + getName() : String
+    + setName(name: String)
+  }
+
+  class UserManager {
+    + registerUser(name: String, password: String) : User
+    + login(name: String, password: String) : Boolean
+    + logout(userId: int) : void
+    + getUser(userId: int) : User
+    + updateUser(user: User) : User
+    + deleteUser(userId: User) : Boolean
+    + grantGroupAccess(groupId: int, userId: int, dataAccess: DataAccess) : Boolean
+  }
+
+  class DataManager {
+  + synchronizeData(userId: int) : Boolean
+  + importData(userId: int, filePath: String) : Boolean
+  + exportData(userId: int, destination: String) : Boolean
+  }
+
+  class GroupManager {
+    + createGroup(name: String) : Group
+    + updateGroup(group: Group): Group
+    + deleteGroup(groupId: int): Boolean
+    + inviteUser(groupId: int, userId: int) : void
+    + removeUser(groupId: int, userId: int) : void
+    + acceptGroupInvitation(groupId: int, userId: int) : void
+  }
+
+  class Subscription {
+    - startDate : Date
+    - endDate : Date
+    - isActive : Boolean
+    - price : Double
+    + Subscription(id: int, startDate: Date, endDate: Date, price: Double)
+    + getId() : int
+    + getStartDate() : Date
+    + getEndDate() : Date
+    + getPrice() : Double
+    + isActive() : Boolean
+  }
+
+  class SubscriptionManager {
+    + renew(userId: int) : void
+    + expire(userId: int) : void
+    + createSubscription(userId: int) : Subscription
+  }
+}
+
+package transaction {
+  class Transaction {
+    - id : int
+    - amount : Double
+    - date : Date
+    - description : String
+    - note : String
+    - isIncoming : Boolean
+    - currency : String
+    - source : String
+    - target : String
+    + Transaction(id: int, amount: Double, date: Date, description: String,
+      note: String, isIncoming: Boolean, currency: String, source: String, target: String)
+    + getId() : int
+    + setId(id : int) : void
+    + getAmount() : Double
+    + setAmount(amount : Double) : void
+    + getDate() : Date
+    + setDate(date : Date) : void
+    + getDescription() : String
+    + setDescription(description : String) : void
+    + getNote() : String
+    + setNote(note : String) : void
+    + isIncoming() : Boolean
+    + setIsIncoming(isIncoming : Boolean) : void
+    + getCurrency() : String
+    + setCurrency(currency : String) : void
+    + getSource() : String
+    + setSource(source : String) : void
+    + getTarget() : String
+    + setTarget(target : String) : void
+  }
+
+  class Category {
+    - id : int
+    - name : String
+    + Category(id: int, name: String)
+    + getId() : int
+    + getName() : String
+  }
+
+  class TransactionTemplate {
+    - id : int
+    - name : String
+    - amount : Double
+    - date : Date
+    - description : String
+    - note : String
+    - isIncoming : Boolean
+    - currency : String
+    - source : String
+    - target : String
+    + TransactionTemplate(id: int, name: String)
+    + getId() : int
+    + getName() : String
+  }
+
+  class ExchangeRate {
+    - id : int
+    - currencyFrom : String
+    - currencyTo : String
+    - rate : Double
+    + ExchangeRate(id: int, currencyFrom: String, currencyTo: String, rate: Double)
+    + getId() : int
+    + getRate() : Double
+  }
+
+  class BudgetLimit {
+    - id : int
+    - limit : Double
+    - currency : String
+    - period : Interval
+    - spentAmount : Double
+    + BudgetLimit(id: int, limit: Double, currency: String, period: Interval)
+    + getId() : int
+    + getLimit() : Double
+    + getCurrency() : String
+    + getPeriod() : Interval
+    + getSpentAmount() : Double
+  }
+
+  class BudgetManager {
+    + createBudget(limit: Double, currency: String, period: String) : BudgetLimit
+    + checkStatus(budget: BudgetLimit) : Boolean
+    + updateSpent(budget: BudgetLimit, amount: Double) : void
+  }
+
+  class TransactionManager {
+    + createTransactions(transactions: List<Transaction>) : List<Transaction>
+    + updateTransaction(transaction: Transaction) : Transaction
+    + deleteTransaction(id: int) : Boolean
+    + getTransaction(id: int) : Transaction
+    + assignCategory(transaction: Transaction, category: Category) : void
+    + applyTemplate(template: TransactionTemplate) : Transaction
+  }
+
+  class ExchangeRateManager {
+    + getRate(from: String, to: String) : Double
+    + updateRate(exchangeRate: ExchangeRate, newRate: Double) : void
+    + convert(amount: Double, from: String, to: String) : Double
+  }
+}
+
+package statistics {
+  class Statistics {
+    - id : int
+    - totalIncome : Double
+    - totalExpenses : Double
+    - averageExpense : Double
+    - currency : String
+    + Statistics(id: int, totalIncome: Double, totalExpenses: Double,
+                averageExpense: Double, currency: String)
+    + getId() : int
+    + getTotalIncome() : Double
+    + getTotalExpenses() : Double
+    + getAverageExpense() : Double
+  }
+
+  class StatisticsManager {
+    + getStatistics(from: Date, to: Date, categoryIds: List<int>) : Statitics
+  }
+}
+
+package bank {
+  class BankAccount {
+    - id : int
+    - bankName : String
+    - iban : String
+    - balance : Double
+    - currency : String
+    - apiKey : String
+    + BankAccount(id: int, bankName: String, iban: String,
+    balance: Double, currency: String, apiKey: String)
+    + getId() : int
+    + getBankName() : String
+    + getIban() : String
+    + getBalance() : Double
+    + getCurrency() : String
+    + getApiKey() : String
+  }
+
+  class PaymentOrder {
+    - id : int
+    - amount : Double
+    - recipientIban : String
+    - executionDate : Date
+    - status : String
+    + PaymentOrder(id: int, amount: Double, recipientIban: String)
+    + getId() : int
+    + getAmount() : Double
+    + getRecipientIban() : String
+    + getStatus() : String
+  }
+
+  class BankManager {
+    + connect(bankAccountId: int) : Boolean
+    + disconnect(bankAccountId: int) : Boolean
+    - fetchTransactions(account: BankAccount) : List<Transaction>
+    + syncTransactions(bankAccountId: int) : Boolean
+    + createPaymentOrder(bankAccountId: int, order: PaymentOrder) : Boolean
+  }
+
+  class BankAccountManager {
+    + createBankAccount(bankAccount: BankAccount) : BankAccount
+    + removeBankAccount(bankAccount: BankAccount) : Boolean
+    + getBankAccount(bankAccountId: int) : BankAccount
+  }
+}
+
+'==========================
+' Relationships
+'==========================
+
+User "1" <--o "0..1" Subscription : has <
+User "1" <--o "0..n" Transaction : has <
+User "1" <--o "0..n" Category : has <
+User "1" <--o "0..n" TransactionTemplate : has <
+User "1" <--o "0..n" BankAccount : has <
+User "1..n" <--o "0..n" Group : has member <
+User "1" <--o "0..n" Group : has owner <
+User "1" <--o "0..n" BudgetLimit : has <
+User ..> DataAccess : <<use>>
+User "1" <--o "0..n" ExchangeRate : has <
+
+Statistics "0..n" o--> "0..n" Category : has >
+Category "1" <--o "0..1" BudgetLimit : limits <
+Transaction "0..n" o--> "1" Category
+Transaction ..> ExchangeRate
+BankAccount "1" *-- "0..n" PaymentOrder : owns >
+
+' Managers -> Entities
+UserManager "1" *--> "0..n" User
+GroupManager "1" *--> "0..n" Group
+SubscriptionManager "1" *--> "0..n" Subscription
+TransactionManager "1" *--> "0..n" Transaction
+TransactionManager "1" *--> "0..n" TransactionTemplate
+TransactionManager "1" *--> "0..n" Category
+ExchangeRateManager "1" *--> "0..n" ExchangeRate
+BankManager ..> BankAccountManager
+BankAccountManager "1" *--> "0..n" BankAccount
+BankManager ..> TransactionManager
+BankManager "1" *--> "0..n" PaymentOrder
+BudgetManager "1" *--> "0..n" BudgetLimit
+DataManager ..> UserManager
+StatisticsManager "1" *--> "0..n" Statistics
+
+@enduml

@@ -1,0 +1,6 @@
+The proposed model is in 3rd form. 
+Variation which would break the 3rd normal form would be for example 
+putting currencyTo and rate into Transaction entity. 
+The reason for that is, that currency, currencyTo and rate 
+are non-key attributes dependent on the primary key (id),
+but rate is dependent on currency and currencyTo.

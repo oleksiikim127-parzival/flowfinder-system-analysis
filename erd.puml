@@ -1,0 +1,134 @@
+@startuml
+title FlowFinder ERD
+
+entity User {
+  * id : int
+  --
+  name : varchar(64) <<unique>>
+  password : varchar(255)
+}
+
+entity DataAccess {
+  * userId : int <<FK>>
+  * groupId : int <<FK>>
+  --
+  accessType : int
+}
+
+entity Group {
+  * id : int
+  --
+  ownerId: int <<FK>>
+  name : varchar(64)
+}
+
+entity GroupMember {
+  * userId : int <<FK>>
+  * groupId : int <<FK>>
+}
+
+entity Subscription {
+  * userId : int <<FK>>
+  --
+  startDate : timestamp
+  endDate : timestamp
+  isActive : boolean
+  price : float
+}
+
+entity Transaction {
+  * id : int
+  --
+  userId : int <<FK>>
+  categoryId : int <<FK>>
+  amount : float
+  date : timestamp
+  description : text
+  note : text
+  isIncoming: boolean
+  currency : char(3)
+  source : varchar(255)
+  target : varchar(255)
+}
+
+entity Category {
+  * id : int
+  --
+  userId : int <<FK>>
+  name : varchar(64)
+}
+
+entity TransactionTemplate {
+  * id : int
+  --
+  userId : int <<FK>>
+  name : varchar(64)
+  amount : float
+  date : timestamp
+  description : text
+  note : text
+  isIncoming: boolean
+  currency : char(3)
+  source : varchar(255)
+  target : varchar(255)
+}
+
+entity ExchangeRate {
+  * userId : it <<FK>>
+  * currencyFrom : char(3)
+  * currencyTo : char(3)
+  --
+  rate : float
+}
+
+entity BankAccount {
+  * id : int
+  --
+  userId : int <<FK>>
+  bankName : varchar(255)
+  iban : varchar(34)
+  balance : float
+  currency : char(3)
+  apiKey : text
+}
+
+entity PaymentOrder {
+  * id : int
+  --
+  amount : float
+  senderAccountId : int <<FK>>
+  recipientIban : varchar(34)
+  executionDate : timestamp
+  status : int
+}
+
+entity BudgetLimit {
+  * categoryId : int <<FK>>
+  --
+  userId : int <<FK>>
+  limit : float
+  currency : char(3)
+  period : interval
+}
+
+User ||--o| Subscription
+User ||..o{ Transaction
+User ||..o{ Category
+User ||..o{ TransactionTemplate
+User ||..o{ BankAccount
+User ||..o{ BudgetLimit
+User ||..o{ ExchangeRate
+
+DataAccess }o--|| User
+DataAccess }o--|| Group
+
+GroupMember }o--|| User
+GroupMember }|--|| Group
+
+Transaction }o..|| Category
+
+Category ||--o| BudgetLimit
+
+BankAccount ||..o{ PaymentOrder
+
+@enduml

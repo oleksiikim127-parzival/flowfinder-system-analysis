@@ -1,0 +1,157 @@
+@startuml
+title FlowFinder Object Class Diagram 1
+
+object "dalinar : User" as User_1 {
+  id = 42
+  name = "Dalinar Kholin"
+  password = "Life before death"
+  dataAccesses = { 45: DataAccess.READ_WRITE }
+}
+
+object "kaladin : User" as User_2 {
+  id = 1
+  name = "Kaladin Stormblessed"
+  password = "Journey before destination"
+  dataAccesses = { 45: DataAccess.READ, 4: DataAccess.READ }
+}
+
+object "knightRadiants : Group" as Group_1 {
+  id = 45
+  name = "Knight Radiants"
+}
+
+object "windrunners : Group" as Group_2 {
+  id = 4
+  name = "Windrunners"
+}
+
+object "monthlySubscriptionDalinar : Subscription" as Subscription {
+    startDate = "19.11.2025"
+    endDate = "19.12.2025"
+    isActive = true
+    price = 7
+}
+
+
+object "monthlySubscriptionKaladin : Subscription" as Subscription_2 {
+    startDate = "10.11.2025"
+    endDate = "10.12.2025"
+    isActive = true
+    price = 7
+}
+
+object "food : Category" as Category_1 {
+    id = 5
+    name = "Food"
+}
+
+object "supplies : Category" as Category_2 {
+    id = 6
+    name = "Supplies"
+}
+
+object ": BudgetLimit" as BudgetLimit {
+    id = 2
+    limit = 500.00
+    currency = "EUR"
+    period = Period.ofMonths(1);
+    spentAmount = 10
+}
+
+object ": Transaction" as Transaction_1 {
+   id = 30
+   amount = 10
+   date = 20.11.2025
+   description = "Food for soldiers"
+   note = "expensive"
+   isIncoming = false
+   currency = "EUR"
+   source = "My pockets"
+   target = "Merchants" 
+}
+
+object ": Transaction" as Transaction_2 {
+   id = 32
+   amount = 10
+   date = 21.11.2025
+   description = "Supply for soldiers"
+   note = "expensive"
+   isIncoming = false
+   currency = "EUR"
+   source = "My pockets"
+   target = "Merchants" 
+}
+
+object "spanreed : TransactionTemplate" as TransactionTemplate {
+    id = 28
+    name = "spanreed"
+    amount = 1024
+    date = "10.11.2025"
+    description = "Current price for one spanreed in Urithuru"
+    note = "expensive"
+    isIncoming = false
+    currency = "CZK"
+    source = "My pockets"
+    target = "fabrial scientists"
+}
+
+object ": ExchangeRate" as ExchangeRate {
+    id = 4
+    currencyFrom = "EUR"
+    currencyTo = "CZK"
+    rate = 24.5
+}
+
+object "kholinarsBank : BankAccount" as BankAccount {
+    id = 42
+    bankName = "Kholinar's bank"
+    iban = "KH42 0000 1234";
+    balance = 42.00
+    currency = "EUR"
+    apiKey = "Honor's Perpendicularity"
+}
+
+object ": PaymentOrder" as PaymentOrder {
+    id = 50
+    amount = 40
+    recipientIban = "SH10 0000 2546"
+    executionDate = "30.11.2025"
+    status = "ready to be sent"
+}
+
+object ": Statistics" as Statisctics {
+    id = 20
+    totalIncome = 0
+    totalExpenses = 20
+    averageExpenses = 10
+    currency = "EUR"
+}
+
+User_1 <-- Group_1 : has owner
+User_2 <-- Group_2 : has owner
+
+Group_1 --> User_1 : has member
+Group_1 --> User_2 : has member
+Group_2 --> User_2 : has member
+
+Subscription --> User_1 : has
+Subscription_2 --> User_2 : has
+
+Category_1 --> User_2 : has
+Category_2 --> User_2 : has
+
+BudgetLimit --> Category_1 : limits 
+
+Transaction_1 --> User_2 : has
+Transaction_2 --> User_2 : has
+Transaction_1 --> Category_1 : has
+Transaction_2 --> Category_2 : has
+
+TransactionTemplate --> User_1 : has
+
+ExchangeRate --> User_2 : has
+
+BankAccount --> User_1 : has
+BankAccount --> PaymentOrder : has
+
+@enduml

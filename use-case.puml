@@ -1,0 +1,71 @@
+@startuml FlowFinder
+
+
+' Actors:
+actor "User" as user
+actor "Premium user" as premiumUser 
+actor "Time" as time
+
+
+premiumUser --|> user
+
+
+left to right direction
+
+' System boundary:
+rectangle "FlowFinder" as FlowFinder {
+    usecase "Enter financial transactions" as enterFinancialTransactions
+    usecase "Manage financial transactions" as manageFinancialTransactions
+    usecase "Assign category" as assignCategory
+    usecase "Manage categories" as manageCategories
+    usecase "Choose main currency" as chooseMainCurrency
+    usecase "Filter transactions" as filterTransactions
+    usecase "View basic statistics" as basicStats
+    usecase "Manage transaction templates" as templates
+    usecase "Import/Export data" as impExp
+    usecase "Subscribe to full version" as subscribe
+    usecase "Synchronize devices" as sync
+    usecase "Connect bank account" as linkBank
+    usecase "Download new bank transactions" as fetchBankTx
+    usecase "Create payment order" as enterPaymentOrder
+    usecase "Show advanced statistics" as showAdvancedStatistics
+    usecase "Cancel a subscription" as cancelSubscription
+    usecase "Manage payment's reminders" as manageReminders
+    usecase "Remind payment" as remindPayment
+    usecase "Manage budget limits" as budgetLimits
+    usecase "Auto download current rates" as autoFX
+    usecase "Manage group" as manageGroup
+    usecase "Pay for subscription" as payForSubscription
+}
+' Associations between actors and use cases:
+user -- enterFinancialTransactions
+user -- manageFinancialTransactions
+user -- manageCategories
+user -- chooseMainCurrency
+user -- filterTransactions
+user -- basicStats
+user -- templates
+user -- impExp
+user -- subscribe
+
+premiumUser -- sync
+premiumUser -- linkBank
+premiumUser -- fetchBankTx
+premiumUser -- enterPaymentOrder
+premiumUser -- budgetLimits
+premiumUser -- showAdvancedStatistics
+premiumUser -- cancelSubscription
+premiumUser -- manageGroup
+premiumUser -- manageReminders
+remindPayment --> premiumUser
+
+time -- cancelSubscription
+time -- remindPayment
+time -- autoFX
+
+
+enterFinancialTransactions ..> assignCategory : <<include>>
+subscribe ..> payForSubscription : <<include>>
+
+
+@enduml 

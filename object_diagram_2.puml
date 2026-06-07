@@ -1,0 +1,139 @@
+@startuml
+title FlowFinder Object Diagram 1 - Budget tracking with multiple categories
+
+object "alice : User" as User_1 {
+  id = 10
+  name = "Alice"
+  password = "duncoJeCh1upaty"
+  dataAccesses = { }
+}
+
+object "foodCategory : Category" as Category_Food {
+  id = 100
+  name = "Food"
+}
+
+object "transportCategory : Category" as Category_Transport {
+  id = 101
+  name = "Transport"
+}
+
+object "foodBudgetLimit : BudgetLimit" as BudgetLimit_Food {
+  id = 5
+  limit = 5000.00
+  currency = "CZK"
+  period = "1 month"
+  spentAmount = 1800.00
+}
+
+object "transportBudgetLimit : BudgetLimit" as BudgetLimit_Transport {
+  id = 6
+  limit = 1500.00
+  currency = "CZK"
+  period = "1 month"
+  spentAmount = 400.00
+}
+
+object ": Transaction" as Transaction_1 {
+  id = 1000
+  amount = 300.00
+  date = "2025-03-01"
+  description = "Groceries Lidl"
+  note = ""
+  isIncoming = false
+  currency = "CZK"
+  source = "Cash"
+  target = "Lidl"
+}
+
+object ": Transaction" as Transaction_2 {
+  id = 1001
+  amount = 450.00
+  date = "2025-03-05"
+  description = "Kebab"
+  note = "Birthday"
+  isIncoming = false
+  currency = "CZK"
+  source = "Card"
+  target = "Restaurant"
+}
+
+object ": Transaction" as Transaction_3 {
+  id = 1002
+  amount = 1050.00
+  date = "2025-03-07"
+  description = "Monthly groceries"
+  note = ""
+  isIncoming = false
+  currency = "CZK"
+  source = "Card"
+  target = "Albert"
+}
+
+object ": Transaction" as Transaction_4 {
+  id = 1003
+  amount = 700.00
+  date = "2025-03-08"
+  description = "3-Month DPMB transport pass"
+  note = ""
+  isIncoming = false
+  currency = "CZK"
+  source = "Card"
+  target = "DPMB"
+}
+
+object "groceries : TransactionTemplate" as Template_Groceries {
+  id = 200
+  name = "Weekly groceries"
+  amount = 500.00
+  date = "2025-03-01"
+  description = "Typical weekly grocery shopping"
+  note = ""
+  isIncoming = false
+  currency = "CZK"
+  source = "Card"
+  target = "Supermarket"
+}
+
+object "czkToEur : ExchangeRate" as ExchangeRate_CZK_EUR {
+  id = 50
+  currencyFrom = "CZK"
+  currencyTo = "EUR"
+  rate = 0.040
+}
+
+object "marchStatistics : Statistics" as Statistics_March {
+  id = 20
+  totalIncome = 0
+  totalExpenses = 3000.00
+  averageExpense = 96.77
+  currency = "CZK"
+}
+
+
+User_1 <-- Category_Food        : has
+User_1 <-- Category_Transport   : has
+User_1 <-- BudgetLimit_Food     : has
+User_1 <-- BudgetLimit_Transport: has
+User_1 <-- Transaction_1        : has
+User_1 <-- Transaction_2        : has
+User_1 <-- Transaction_3        : has
+User_1 <-- Transaction_4        : has
+User_1 <-- Template_Groceries   : has
+User_1 <-- ExchangeRate_CZK_EUR : has
+
+
+BudgetLimit_Food --> Category_Food          : limits
+BudgetLimit_Transport --> Category_Transport: limits
+
+
+Transaction_1 --> Category_Food
+Transaction_2 --> Category_Food
+Transaction_3 --> Category_Food
+Transaction_4 --> Category_Transport
+
+Template_Groceries --> Category_Food
+
+Transaction_4 ..> ExchangeRate_CZK_EUR : may convert
+
+@enduml 

@@ -1,0 +1,4 @@
+include:
+  - project: 'pb007/ci'
+    ref: main
+    file: 'plantuml.yml'

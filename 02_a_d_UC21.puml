@@ -1,0 +1,41 @@
+@startuml Manage Group
+title Manage Group
+
+start
+
+:Open "Groups" section;
+:Display list of existing groups;
+
+if (Create a new group?) then ([Yes])
+    :Enter group name;
+    :Create a new group;
+    :Show message "Group created";
+    stop
+else ([No])
+    :Select a group;
+
+    if (Is member?) then (Yes)
+        if (Is owner?) then (Yes)
+            :Open group settings;
+            fork
+                :Manage members (remove/invite);
+            fork again
+                :Change access levels (RO/RW);
+            fork again
+                :Edit group details;
+            fork again
+                :Transfer ownership;
+            end fork
+                :Save changes;
+            stop
+        else (No)
+            :Leave group;
+            stop
+        endif
+    else (No)
+        :Join group;
+        stop
+    endif
+endif
+
+@enduml

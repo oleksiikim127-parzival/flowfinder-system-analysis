@@ -1,0 +1,32 @@
+@startuml sequence_diagram_UC_6_FilterTransactions
+title Filter Transactions sequence diagram
+autonumber
+autoactivate on
+
+actor Actor as "User"
+participant UI as "FlowFinder UI"
+participant TransactionManager as "TransactionManager"
+participant StatisticsManager as "StatisticsManager"
+
+Actor -> UI : openTransactionsScreen()
+UI -> TransactionManager : getTransactions(null, null, null, Actor.id)
+TransactionManager --> UI : transactions
+
+UI -> StatisticsManager : getStatistics(null, null, null, Actor.id)
+StatisticsManager --> UI : stats
+UI -> Actor : display(transactions, stats)
+
+Actor -> UI : setFilter(dateRange, categoryIds, amountRange, descriptionSubstring)
+
+UI -> TransactionManager : getTransactions(criteria.from,\n criteria.to,\n criteria.categoryIds,\n Actor.id)
+TransactionManager --> UI : filtered
+
+alt filtered is empty
+    UI -> Actor : displayMessage("No transactions found")
+else filtered has items
+    UI -> StatisticsManager : getStatistics(criteria.from,\n criteria.to,\n criteria.categoryIds,\n Actor.id)
+    StatisticsManager --> UI : stats
+    UI -> Actor : display(filtered, stats)
+end
+
+@enduml
